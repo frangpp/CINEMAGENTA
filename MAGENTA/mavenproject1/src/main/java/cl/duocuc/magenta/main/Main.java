@@ -5,23 +5,25 @@
 package cl.duocuc.magenta.main;
 
 import cl.duocuc.magenta.database.DatabaseConnection;
+import cl.duocuc.magenta.gui.MainFrame;
+import javax.swing.SwingUtilities;
+
 /**
  *
  * @author franciscagoeppinger
  */
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Iniciando Cine Magenta...");
-        System.out.println("Probando conexión a la base de datos...");
-        
-        if (DatabaseConnection.probarConexion()) {
-            System.out.println("Conexión exitosa! Sistema listo.");
-        } else {
-            System.out.println("Error: No se pudo conectar a la base de datos");
-            System.out.println("Verifica que:");
-            System.out.println("   - MySQL esté ejecutándose");
-            System.out.println("   - La base de datos 'Cine_DB' exista");
-            System.out.println("   - Las credenciales en DatabaseConnection sean correctas");
-        }
+        SwingUtilities.invokeLater(() -> {
+            System.out.println("----Iniciando Cine Magenta----");
+            
+            if (DatabaseConnection.probarConexion()) {
+                System.out.println("Conexión exitosa! Abriendo interfaz...");
+                MainFrame mainFrame = new MainFrame();
+                mainFrame.setVisible(true);
+            } else {
+                System.out.println("Error: No se pudo conectar a la BD");
+            }
+        });
     }
 }
