@@ -1,0 +1,8 @@
+cl/duocuc/magenta/main/Main.class
+cl/duocuc/magenta/database/PeliculaDAO.class
+cl/duocuc/magenta/gui/MainFrame.class
+cl/duocuc/magenta/modelos/Pelicula.class
+cl/duocuc/magenta/gui/AgregarPeliculaForm.class
+cl/duocuc/magenta/database/DatabaseConnection.class
+cl/duocuc/magenta/gui/EliminarPeliculaForm.class
+cl/duocuc/magenta/gui/ModificarPeliculaForm.class
