@@ -93,27 +93,81 @@ public class PeliculaDAO {
     }
     
     // LISTAR todas
-    public List<Pelicula> listarPeliculas() {
+    public List<Pelicula> listarTodas() {
         List<Pelicula> peliculas = new ArrayList<>();
-        String sql = "SELECT * FROM Cartelera";
+        String sql = "SELECT * FROM Cartelera ORDER BY titulo";
         
         try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             
             while (rs.next()) {
-                Pelicula pelicula = new Pelicula(
-                    rs.getString("titulo"),
-                    rs.getString("director"),
-                    rs.getInt("año"),
-                    rs.getInt("duracion"),
-                    rs.getString("genero")
-                );
+                Pelicula pelicula = new Pelicula();
                 pelicula.setId(rs.getInt("id"));
+                pelicula.setTitulo(rs.getString("titulo"));
+                pelicula.setDirector(rs.getString("director"));
+                pelicula.setAño(rs.getInt("año"));
+                pelicula.setDuracion(rs.getInt("duracion"));
+                pelicula.setGenero(rs.getString("genero"));
                 peliculas.add(pelicula);
             }
         } catch (SQLException e) {
             System.err.println("Error al listar películas: " + e.getMessage());
+        }
+        return peliculas;
+    }
+    
+    // BUSCAR POR RANGO DE AÑOS - Para filtros
+    public List<Pelicula> buscarPorRangoAños(int añoInicio, int añoFin) {
+        List<Pelicula> peliculas = new ArrayList<>();
+        String sql = "SELECT * FROM Cartelera WHERE año BETWEEN ? AND ? ORDER BY año";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setInt(1, añoInicio);
+            stmt.setInt(2, añoFin);
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                Pelicula pelicula = new Pelicula();
+                pelicula.setId(rs.getInt("id"));
+                pelicula.setTitulo(rs.getString("titulo"));
+                pelicula.setDirector(rs.getString("director"));
+                pelicula.setAño(rs.getInt("año"));
+                pelicula.setDuracion(rs.getInt("duracion"));
+                pelicula.setGenero(rs.getString("genero"));
+                peliculas.add(pelicula);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al buscar por rango de años: " + e.getMessage());
+        }
+        return peliculas;
+    }
+    
+    // BUSCAR POR GÉNERO - Para filtros
+    public List<Pelicula> buscarPorGenero(String genero) {
+        List<Pelicula> peliculas = new ArrayList<>();
+        String sql = "SELECT * FROM Cartelera WHERE genero = ? ORDER BY titulo";
+        
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, genero);
+            ResultSet rs = stmt.executeQuery();
+            
+            while (rs.next()) {
+                Pelicula pelicula = new Pelicula();
+                pelicula.setId(rs.getInt("id"));
+                pelicula.setTitulo(rs.getString("titulo"));
+                pelicula.setDirector(rs.getString("director"));
+                pelicula.setAño(rs.getInt("año"));
+                pelicula.setDuracion(rs.getInt("duracion"));
+                pelicula.setGenero(rs.getString("genero"));
+                peliculas.add(pelicula);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al buscar por género: " + e.getMessage());
         }
         return peliculas;
     }
