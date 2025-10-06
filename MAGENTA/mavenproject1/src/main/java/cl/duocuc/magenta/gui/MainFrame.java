@@ -5,6 +5,7 @@
 package cl.duocuc.magenta.gui;
 
 import javax.swing.*;
+import java.awt.*;
 /**
  *
  * @author franciscagoeppinger
@@ -13,11 +14,12 @@ public class MainFrame extends JFrame {
      public MainFrame() {
         configurarVentana();
         crearMenu();
+        inicializarContenido();
      }
      
      private void configurarVentana() {
         setTitle("Cine Magenta - Sistema de Cartelera");
-        setSize(800, 600);
+        setSize(900, 650);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }
@@ -33,6 +35,7 @@ public class MainFrame extends JFrame {
         
         itemModificar.addActionListener( e -> abrirModificarPelicula());
         itemEliminar.addActionListener(e -> abrirEliminarPelicula());
+        itemListar.addActionListener(e -> abrirListarPeliculas());
         
         menuPeliculas.add(itemAgregar);
         menuPeliculas.add(itemModificar);
@@ -43,7 +46,44 @@ public class MainFrame extends JFrame {
         menuBar.add(menuPeliculas);
         setJMenuBar(menuBar);
     }
-    
+
+    private void inicializarContenido() {
+        JPanel panelPrincipal = new JPanel(new BorderLayout());
+        panelPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        // Sidebar
+        JPanel sidebar = new JPanel();
+        sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
+        sidebar.setBackground(new Color(230, 230, 245));
+        sidebar.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        JButton btnAgregar = new JButton("Agregar");
+        JButton btnModificar = new JButton("Modificar");
+        JButton btnEliminar = new JButton("Eliminar");
+        JButton btnListar = new JButton("Listar");
+
+        btnModificar.addActionListener(e -> abrirModificarPelicula());
+        btnEliminar.addActionListener(e -> abrirEliminarPelicula());
+        btnListar.addActionListener(e -> abrirListarPeliculas());
+
+        sidebar.add(btnAgregar);
+        sidebar.add(Box.createVerticalStrut(10));
+        sidebar.add(btnModificar);
+        sidebar.add(Box.createVerticalStrut(10));
+        sidebar.add(btnEliminar);
+        sidebar.add(Box.createVerticalStrut(10));
+        sidebar.add(btnListar);
+
+        panelPrincipal.add(sidebar, BorderLayout.WEST);
+
+        // Área central
+        JLabel lblTitulo = new JLabel("Bienvenido a Cine Magenta", SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 28));
+        panelPrincipal.add(lblTitulo, BorderLayout.CENTER);
+
+        setContentPane(panelPrincipal);
+    }
+
     private void abrirModificarPelicula() {
         System.out.println("Abriendo formulario Modificar...");
         ModificarPeliculaForm form = new ModificarPeliculaForm(this);
@@ -53,6 +93,11 @@ public class MainFrame extends JFrame {
     private void abrirEliminarPelicula() {
         System.out.println("Abriendo formulario Eliminar...");
         EliminarPeliculaForm form = new EliminarPeliculaForm(this);
+        form.setVisible(true);
+    }
+    
+    private void abrirListarPeliculas() {
+        ListarPeliculaForm form = new ListarPeliculaForm(this);
         form.setVisible(true);
     }
     

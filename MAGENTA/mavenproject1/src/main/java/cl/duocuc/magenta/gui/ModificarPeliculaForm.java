@@ -24,53 +24,94 @@ public class ModificarPeliculaForm extends JDialog {
         super(parent, "Modificar Película", true);
         peliculaDAO = new PeliculaDAO();
         inicializarComponentes();
-        setSize(400, 350);
+        setSize(440, 370);
         setLocationRelativeTo(parent);
     }
 
     private void inicializarComponentes() {
-        setLayout(new GridLayout(7, 2, 10, 10));
-        
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 24, 20, 24));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(8, 8, 8, 8);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+
         // Búsqueda
-        add(new JLabel("ID a buscar:"));
-        txtId = new JTextField(); 
-        add(txtId);
-        
-        add(new JLabel("")); 
-        btnBuscar = new JButton("Buscar Película");
-        add(btnBuscar);
-        
+        panel.add(new JLabel("ID a buscar:"), gbc);
+        gbc.gridx = 1;
+        txtId = new JTextField(10);
+        panel.add(txtId, gbc);
+
+        gbc.gridx = 2;
+        btnBuscar = new JButton("Buscar");
+        panel.add(btnBuscar, gbc);
+
+        // Línea separadora
+        gbc.gridx = 0;
+        gbc.gridy++;
+        gbc.gridwidth = 3;
+        JSeparator sep = new JSeparator();
+        sep.setPreferredSize(new Dimension(1, 2));
+        panel.add(sep, gbc);
+        gbc.gridwidth = 1;
+
         // Campos de edición
-        add(new JLabel("Título:"));
+        gbc.gridy++;
+        gbc.gridx = 0;
+        panel.add(new JLabel("Título:"), gbc);
+        gbc.gridx = 1;
+        gbc.gridwidth = 2;
         txtTitulo = new JTextField();
-        add(txtTitulo);
-        
-        add(new JLabel("Director:"));
+        panel.add(txtTitulo, gbc);
+        gbc.gridwidth = 1;
+
+        gbc.gridy++;
+        gbc.gridx = 0;
+        panel.add(new JLabel("Director:"), gbc);
+        gbc.gridx = 1;
+        gbc.gridwidth = 2;
         txtDirector = new JTextField();
-        add(txtDirector);
-        
-        add(new JLabel("Año:"));
+        panel.add(txtDirector, gbc);
+        gbc.gridwidth = 1;
+
+        gbc.gridy++;
+        gbc.gridx = 0;
+        panel.add(new JLabel("Año:"), gbc);
+        gbc.gridx = 1;
         spnAño = new JSpinner(new SpinnerNumberModel(2024, 1888, 2024, 1));
-        add(spnAño);
-        
-        add(new JLabel("Duración (min):"));
+        panel.add(spnAño, gbc);
+
+        gbc.gridx = 2;
+        panel.add(new JLabel("Duración (min):"), gbc);
+        gbc.gridx = 3;
         spnDuracion = new JSpinner(new SpinnerNumberModel(120, 1, 300, 1));
-        add(spnDuracion);
-        
-        add(new JLabel("Género:"));
+        panel.add(spnDuracion, gbc);
+
+        gbc.gridy++;
+        gbc.gridx = 0;
+        panel.add(new JLabel("Género:"), gbc);
+        gbc.gridx = 1;
+        gbc.gridwidth = 2;
         cmbGenero = new JComboBox<>(new String[]{"Comedia", "Drama", "Acción", "Terror", "Ciencia Ficción", "Romance"});
-        add(cmbGenero);
-        
+        panel.add(cmbGenero, gbc);
+        gbc.gridwidth = 1;
+
         // Botones
+        gbc.gridy++;
+        gbc.gridx = 1;
         btnActualizar = new JButton("Actualizar");
         btnLimpiar = new JButton("Limpiar");
-        add(btnActualizar);
-        add(btnLimpiar);
-        
-        // Deshabilitar campos hasta búsqueda
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 16, 0));
+        panelBotones.add(btnActualizar);
+        panelBotones.add(btnLimpiar);
+        gbc.gridwidth = 2;
+        panel.add(panelBotones, gbc);
+
+        setContentPane(panel);
+
         habilitarCamposEdicion(false);
-        
-        // Eventos
+
         btnBuscar.addActionListener(e -> buscarPelicula());
         btnActualizar.addActionListener(e -> actualizarPelicula());
         btnLimpiar.addActionListener(e -> limpiarCampos());

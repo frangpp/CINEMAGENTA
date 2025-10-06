@@ -24,40 +24,57 @@ public class EliminarPeliculaForm extends JDialog {
         super(parent, "Eliminar Película", true);
         peliculaDAO = new PeliculaDAO();
         inicializarComponentes();
-        setSize(400, 250);
+        setSize(420, 260);
         setLocationRelativeTo(parent);
     }
 
     private void inicializarComponentes() {
-        setLayout(new GridLayout(5, 2, 10, 10));
-        
-        // Búsqueda
-        add(new JLabel("ID de película:"));
-        txtId = new JTextField();
-        add(txtId);
-        
-        add(new JLabel(""));
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(8, 8, 8, 8);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+
+        // ID de película
+        panel.add(new JLabel("ID de película:"), gbc);
+        gbc.gridx = 1;
+        txtId = new JTextField(12);
+        panel.add(txtId, gbc);
+
+        // Botón Buscar
+        gbc.gridx = 2;
         btnBuscar = new JButton("Buscar");
-        add(btnBuscar);
-        
+        panel.add(btnBuscar, gbc);
+
         // Información de la película encontrada
-        add(new JLabel("Película encontrada:"));
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(new JLabel("Película encontrada:"), gbc);
+        gbc.gridx = 1;
+        gbc.gridwidth = 2;
         lblInfoPelicula = new JLabel(" - ");
-        add(lblInfoPelicula);
-        
+        panel.add(lblInfoPelicula, gbc);
+        gbc.gridwidth = 1;
+
         // Espacio vacío
-        add(new JLabel(""));
-        add(new JLabel(""));
-        
-        // Botones
+        gbc.gridx = 0;
+        gbc.gridy++;
+        panel.add(new JLabel(""), gbc);
+
+        // Botones Eliminar y Limpiar
+        gbc.gridy++;
+        gbc.gridx = 1;
         btnEliminar = new JButton("Eliminar");
-        btnLimpiar = new JButton("Limpiar");
-        add(btnEliminar);
-        add(btnLimpiar);
-        
-        // Inicialmente deshabilitar botón eliminar
         btnEliminar.setEnabled(false);
-        
+        panel.add(btnEliminar, gbc);
+        gbc.gridx = 2;
+        btnLimpiar = new JButton("Limpiar");
+        panel.add(btnLimpiar, gbc);
+
+        setContentPane(panel);
+
         // Eventos
         btnBuscar.addActionListener(e -> buscarPelicula());
         btnEliminar.addActionListener(e -> eliminarPelicula());
